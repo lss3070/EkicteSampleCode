@@ -174,8 +174,6 @@ const videoMainPage=async({newPage,context}:IVideoMainInput)=>{
         console.log(ableCycle);
             console.log('사이클 내부 실행!');
             const result = await videoCycle({newPage,context,frame});
-            console.log('result');
-            console.log(result);
             if(result&&result?.state){
                 console.log('in!!');
                 result.viewPage.close();
@@ -241,20 +239,21 @@ try{
         console.log('videoPage')
 
         await videoPage.waitForLoadState();
-        await videoPage.on('dialog',(dialog:Dialog)=>{
+        await videoPage.on('dialog',async (dialog:Dialog)=>{
 
             if(dialog.type()==='alert'&& dialog.message()==="학습창을 닫은(학습종료버튼클릭) 후 목차에서 다음 강의를 열어주시기 바랍니다."){
                 console.log('6/6종료');
                 videoPage.close();
                 newPage.reload();
                 videoMainPage({newPage,context});
-                console.log('#learningFrame > #detailForm > .contents-wrap > .btn_test-wrap > .btn_finish')
+                // console.log('#learningFrame > #detailForm > .contents-wrap > .btn_test-wrap > .btn_finish')
                 // return{
                 //     state:true,
                 //     videoPage
                 // }
             }else{
                 dialog.accept();
+                console.log('강의 완료')
             }
             //학습창을 닫은(학습종료버튼클릭) 후 목차에서 다음 강의를 열어주시기 바랍니다.
         })
