@@ -1,5 +1,5 @@
 
-import { Dialog,chromium,webkit,firefox } from 'playwright';
+import { Dialog,chromium,webkit,firefox, } from 'playwright';
 
 interface MailGetOutput{
     state:boolean
@@ -26,12 +26,6 @@ interface IVideoCycleOutput{
     viewPage?:any;
 }
 
-const token =
-  'xoxb-2492418043186-2494021131381-yx86rgo5NrTTMijPC5QSOGGO';
-const signingSecret='d9801eb3e4b0f6e95122d84274a3703f'
-
-const appToken =
-  'xapp-1-A02E694U4KZ-2521230333536-b05a79389abfc1680ffc7cd2959ad02e737257032b228d42a0c7cda6b99af820';
 
 
 
@@ -84,9 +78,9 @@ const mainLogin = async ()=>{
        
         //로그인
         await page.waitForSelector('input[accesskey="L"]');
-        await page.type('input[accesskey="L"]', "genie3217");
+        await page.type('input[accesskey="L"]', "email");
         await page.waitForSelector('#loginForm > input[name="loginPwd"]');
-        await page.type('#loginForm > input[name="loginPwd"]', "wlsgml249@");
+        await page.type('#loginForm > input[name="loginPwd"]', "pw");
         await page.click('#loginForm > button[title="로그인"]');
         
         // await page.evalute(`window.confirm = () => true`)
@@ -121,11 +115,10 @@ const mainLogin = async ()=>{
                 index++;
             }
         })
-
         //학습현황란에 학습창 클릭
         const [newPage] = await Promise.all([
             context.waitForEvent('page'),
-            page.click(`#listForm > .list-type > table > tbody:last-child > tr:nth-child(3) > td:nth-child(7) > a`)
+            page.click(`#listForm > .list-type > table > tbody:last-child > tr:nth-child(1) > td:nth-child(7) > a`)
         ]);
 
         console.log('학습창 클릭완료');
@@ -133,12 +126,10 @@ const mainLogin = async ()=>{
         await videoMainPage({newPage,context});
 
         return null;
-
     }catch(error){
         console.log(error);
     }
 };
-
 
 const videoMainPage=async({newPage,context}:IVideoMainInput)=>{
     await newPage.waitForTimeout(1000);
@@ -272,6 +263,7 @@ try{
             }`
             )
         });
+        await videoPage.on('console',async(msg:any)=>console.log(msg));
         return{
             state:false
         }
